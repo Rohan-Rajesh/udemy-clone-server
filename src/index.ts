@@ -4,13 +4,15 @@ import bodyParser from 'body-parser';
 import logger from './config/logger';
 import config from './config/config';
 
+import userRoutes from './routes/user';
+
 const NAMESPACE = 'Server';
 const app = express();
 
 // * Logger Middleware
 app.use((req, res, next) => {
 	res.on('finish', () => {
-		logger.info(NAMESPACE, `METHOD - ${req.method}, URL - ${req.url}, STATUS - ${req.statusCode}`);
+		logger.info(NAMESPACE, `METHOD - ${req.method}, URL - ${req.url}, STATUS - ${res.statusCode}`);
 	});
 
 	next();
@@ -24,6 +26,9 @@ app.use((req, res, next) => {
 	res.header('Access-Control-Allow-Origin', '*');
 	next();
 });
+
+// * Routes
+app.use('/user', userRoutes);
 
 // * Error Handling
 app.use((req, res, _) => {
